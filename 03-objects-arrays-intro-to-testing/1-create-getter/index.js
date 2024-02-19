@@ -8,11 +8,9 @@ export function createGetter(path) {
     if (words.length === 0) return undefined;
     let func = (objectSource) => {
         function iterate(obj, stack) {
-           // console.log("obj", obj);
-           // console.log("stack", stack);
             const properties = stack.split('.');
             if (obj.hasOwnProperty(properties[0])) {
-                if (properties.length === 1) { return obj[properties[0]] }
+                if (properties.length === 1) { return obj[properties[0]] } // We found need value
                 else {
                    let objNew = Object.assign({}, obj[properties[0]]);
                    delete properties[0]; 
