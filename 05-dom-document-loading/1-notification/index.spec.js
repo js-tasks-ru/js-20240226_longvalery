@@ -92,4 +92,5 @@ describe('dom-document-loading/notification', () => {
 
     expect(notificationMessage.element).not.toBeInTheDocument();
   });
+
 });

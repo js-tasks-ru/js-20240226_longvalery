@@ -3,7 +3,7 @@ export default class ColumnChart {
   subElements = {};
   chartHeight = 50;
 
-  constructor({ data = [], label = '', link = '',  value = 0, formatHeading = undefined  } = {}) {
+  constructor({ data = [], label = '', link = '', value = 0, formatHeading = undefined } = {}) {
     this.data = data;
     this.label = label;
     this.link = link;
@@ -11,22 +11,22 @@ export default class ColumnChart {
     if (formatHeading != undefined) { this.value = formatHeading(this.value);}
 
     this.render();
-                                                                                                 }
+  }
 
   getColumnBody(data) {
     if (Array.isArray(data) && data.length > 0) { 
-       const maxValue = Math.max(...data);
-       return data.map(item => {
-           const scale = this.chartHeight / maxValue;
-           const percent = (item / maxValue * 100).toFixed(0);
-//           return `<div style="--value: ${item}; text-align: center; top: 50%; margin-top: -0.625em;" data-value="${item}" data-tooltip="${percent}%" class="column-chart__item"></div>`;
-           return `<div style="--value: ${Math.floor(item * scale)}; text-align: center; top: 50%; margin-top: -0.625em;" data-value="${item}" data-tooltip="${percent}%" class="column-chart__item"></div>`;
-                               }).join('');
-                                                }
+      const maxValue = Math.max(...data);
+      return data.map(item => {
+        const scale = this.chartHeight / maxValue;
+        const percent = (item / maxValue * 100).toFixed(0);
+        //           return `<div style="--value: ${item}; text-align: center; top: 50%; margin-top: -0.625em;" data-value="${item}" data-tooltip="${percent}%" class="column-chart__item"></div>`;
+        return `<div style="--value: ${Math.floor(item * scale)}; text-align: center; top: 50%; margin-top: -0.625em;" data-value="${item}" data-tooltip="${percent}%" class="column-chart__item"></div>`;
+      }).join('');
+    }
     else {
-       return "charts-skeleton.svg";
-         }
-                      } 
+      return "charts-skeleton.svg";
+    }
+  } 
 
   getLink() {
     return this.link ? `<a class="column-chart__link" href="${this.link}">View all</a>` : '';
@@ -74,7 +74,7 @@ export default class ColumnChart {
     }, {});
   }
 
-/*
+  /*
   update({headerData, bodyData}) {
     this.subElements.header.textContent = headerData;
     this.subElements.body.innerHTML = this.getColumnBody(bodyData);
@@ -82,7 +82,7 @@ export default class ColumnChart {
 */
   update(data) {
     this.data = data;
-               }
+  }
   remove () {
     this.element.remove();
   }
@@ -93,7 +93,7 @@ export default class ColumnChart {
   }
 
   updateSummaryValue() {
-     this.value = this.data.reduce((sum, current) => sum + current, 0);    
-                       }
+    this.value = this.data.reduce((sum, current) => sum + current, 0);    
+  }
 
 }
