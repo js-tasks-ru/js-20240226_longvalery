@@ -34,6 +34,7 @@ describe('dom-document-loading/notification', () => {
 
   it('should be removed after time defined in duration property', () => {
     const duration = 1000;
+    jest.useFakeTimers(); // This need 
 
     notificationMessage = new NotificationMessage('message', {
       duration
@@ -44,7 +45,7 @@ describe('dom-document-loading/notification', () => {
     document.body.append(notificationMessage.element);
 
     // This mocks out any call to setTimeout, setInterval with dummy functions
-    jest.useFakeTimers();
+    // jest.useFakeTimers(); // was here, but this is wrong place  
 
     notificationMessage.show();
 
@@ -92,4 +93,5 @@ describe('dom-document-loading/notification', () => {
 
     expect(notificationMessage.element).not.toBeInTheDocument();
   });
+
 });
