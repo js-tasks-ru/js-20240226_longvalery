@@ -10,6 +10,11 @@ export default class NotificationMessage {
       this.duration = options["duration"] || 1000 ;
       this.type = options["type"] || "success";
 
+      this.element = this.createTemplate();
+      this.createTimer();
+    }
+
+    createTemplate() {
       const div = document.createElement('div');
       div.setAttribute("id", "messageDiv");
       div.className = "notification " + this.type;
@@ -19,16 +24,24 @@ export default class NotificationMessage {
                         this.message +
                         '</div></div>';
       div.innerHTML = textBody;
-      this.element = div;
-      setTimeout(() => {console.log("remove"); this.remove(); }, this.duration);
+      return div;
+    }
+    
+    createTimer() {
+      this.timer = setTimeout(() => { this.remove();}, this.duration);
     }
     
     remove() {
       this.element.remove();
     }
+    
+    removeTimer() {
+      clearTimeout(this.timer);
+    } 
 
     destroy() {
-      this.element.remove();
+      this.removeTimer();
+      this.remove();
     }
 
     checkAndDestroy() {
