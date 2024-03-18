@@ -1,6 +1,9 @@
 export default class SortableTable {
   headerConfig = []; 
   data = [];
+  element = {};
+  subElements = {};
+  testElement = {}; 
 
   constructor(headerConfig = [], data = []) {
     this.headerConfig = headerConfig; 
@@ -9,7 +12,7 @@ export default class SortableTable {
     this.element.className = "sortable-table";
   }
 
-  formHeader(sortColumn, sortDirection) {
+  createHeader(sortColumn, sortDirection) {
     let header = '<div data-elem="header" class="sortable-table__header sortable-table__row bold ">';  
     let isSortable = "";
     for (let i = 0; i < (this.headerConfig.length); i++) {
@@ -24,35 +27,51 @@ export default class SortableTable {
     } 
     header += '</div>';                                                          
     return header;                                                           
-                                                              
   }
 
-  formTable() {
+  createSubElements() {
+    this.subElements = this.element.querySelectorAll('.sortable-table__row');
+    this.testElement = document.body.querySelectorAll('.sortable-table');
+  }
+
+  getSubElements(element) {
+    const elements = element.querySelectorAll(".sortable-table__row");
+
+    return [...elements].reduce((accum, subElement) => {
+      accum[subElement.dataset.element] = subElement;
+
+      return accum;
+    }, {});
+  }
+
+
+  createTable() {
     let body = '<div data-elem="body" class="sortable-table__body">';
+    let line = "";
     for (let i = 0; i < (this.data.length); i++) {
-      body += '<div class="sortable-table__row">';
+      line = '<div class="sortable-table__row">';
       if (this.data[i].images != undefined) {
-        body += '<div class="sortable-table__cell"><img class="sortable-table-image" alt="?" src="' + this.data[i].images[0].url + '"></div>';
+        line += '<div class="sortable-table__cell"><img class="sortable-table-image" alt="?" src="' + this.data[i].images[0].url + '"></div>';
       }
       else {
-        body += '<div class="sortable-table__cell">No Photo</div>';
+        line += '<div class="sortable-table__cell">No Photo</div>';
       } 
-      body += '<div class="sortable-table__cell">' + this.data[i].title + '</div>';
-      body += '<div class="sortable-table__cell">' + this.data[i].quantity + '</div>';
-      body += '<div class="sortable-table__cell">' + this.data[i].price + '</div>';
-      body += '<div class="sortable-table__cell">' + this.data[i].sales + '</div>';
-      body += '</div>';
+      for (let j = 1; j < this.headerConfig.length; j++) {
+        line += '<div class="sortable-table__cell">' + this.data[i][this.headerConfig[j].id] + '</div>';
+      }
+      line += '</div>';
+      body += line;
     }
     body += '</div>';
     return body;
-
   }
 
   sort(fieldValue, orderValue) {
     this.data = this.sortColumn(fieldValue, orderValue);
-    const line = this.formHeader(fieldValue, orderValue) + 
-                 this.formTable();
+    const line = this.createHeader(fieldValue, orderValue) + this.createTable();
     this.element.innerHTML = line;
+    // this.createSubElements();
+    this.subElements = this.getSubElements(this.element);
     return ; 
   }                          
 
@@ -72,11 +91,16 @@ export default class SortableTable {
       });
     }
     return result;
-
   }
-   
+
   destroy() {
     this.element.remove();
+    this.subElements = {};
+    this.headerConfig = []; 
+    this.data = [];  
   }   
-} // end of Class
+
+   
+}
+
 
