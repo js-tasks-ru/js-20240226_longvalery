@@ -1,4 +1,5 @@
 export default class NotificationMessage {
+    static _instance; 
     message = "";
     options = {};
     duration = 0;
@@ -9,9 +10,7 @@ export default class NotificationMessage {
       this.message = message;
       this.duration = options["duration"] || 1000 ;
       this.type = options["type"] || "success";
-
       this.element = this.createTemplate();
-      this.createTimer();
     }
 
     createTemplate() {
@@ -40,20 +39,22 @@ export default class NotificationMessage {
     } 
 
     destroy() {
+      NotificationMessage._instance = undefined;
       this.removeTimer();
       this.remove();
     }
 
-    checkAndDestroy() {
-      const element = document.getElementById("messageDiv");
-      if (element != undefined) { element.remove(); return true; }
-      return false;
+    hide() {
+      this.element.style.display = 'none';
     }
-
+   
     show(item) {
       if (item != undefined) { this.element = item; } // !!!! No SOLID
-      if (this.checkAndDestroy()) { return ;}
-      else { document.body.append(this.element); }
+      this.createTimer();
+      if (NotificationMessage._instance) { this.hide(); NotificationMessage._instance.destroy(); return;}
+      NotificationMessage._instance = this;
+      document.body.append(this.element); 
+     
     }                                                                        
 
 }

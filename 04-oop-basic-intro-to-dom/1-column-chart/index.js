@@ -74,12 +74,6 @@ export default class ColumnChart {
     }, {});
   }
 
-  /*
-  update({headerData, bodyData}) {
-    this.subElements.header.textContent = headerData;
-    this.subElements.body.innerHTML = this.getColumnBody(bodyData);
-  }
-*/
   update(data) {
     this.data = data;
   }
@@ -90,6 +84,9 @@ export default class ColumnChart {
   destroy() {
     this.remove();
     this.subElements = {};
+    this.data = [];
+    this.label = '';
+    this.link = '';
   }
 
   updateSummaryValue() {
